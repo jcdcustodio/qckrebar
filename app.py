@@ -100,7 +100,8 @@ if st.session_state.cut_schedule:
     disp_cut_schedule = pd.DataFrame(wcut_schedule, columns=["cut_length", "quantity"])
     st.dataframe(disp_cut_schedule, use_container_width=True)
 else:
-    st.markdown("*Cutting list is empty.*")
+    st.markdown("`Cutting list is empty`")
+    st.table()
 
 
 # Return and display result
@@ -113,16 +114,24 @@ disp_excess = st.expander("**Show Unused Excess**")
 st.markdown("**Cutting Process Log**")
 disp_log = st.container()
 
-if st.session_state.cut_schedule and start_estimate:
+columns_estimate = ["rebar_length", "quantity"]
+columns_excess = ["excess_length", "quantity"]
+columns_log = ["produced_length",
+                   "produced_qty",
+                   "produced_type",
+                   "from_length",
+                   "from_length_type"]
+
+if st.session_state.cut_schedule and wclengths and start_estimate:
     result = get_estimate(cut_schedule=wcut_schedule, wclengths=wclengths)
     
     # Display estimate result
-    disp_estimate_result = pd.DataFrame(sorted(result[0].items()), columns=["rebar_length", "quantity"])
+    disp_estimate_result = pd.DataFrame(sorted(result[0].items()), columns=columns_estimate)
     with disp_result:
         st.dataframe(disp_estimate_result, use_container_width=True)
 
     # Display unused excess lengths from estimate
-    disp_excess_inventory = pd.DataFrame(result[1].items(), columns=["excess_length", "quantity"])
+    disp_excess_inventory = pd.DataFrame(result[1].items(), columns=columns_excess)
     with disp_excess:
         st.dataframe(disp_excess_inventory, use_container_width=True)
 
@@ -132,11 +141,14 @@ if st.session_state.cut_schedule and start_estimate:
         st.dataframe(disp_cut_record, use_container_width=True)
 else:
     with disp_result:
-        st.markdown("*No result to show.*")
+        st.markdown("`No results to show`")
+        st.table()
     with disp_excess:
-        st.markdown("*No result to show.*")
+        st.markdown("`No excess lengths to show`")
+        st.table()
     with disp_log:
-        st.markdown("*No result to show.*")
+        st.markdown("`No logs to show`")
+        st.table()
 
 
 with st.container(border=True):

@@ -143,7 +143,7 @@ def use_excess_length(
         else:
             qty_used_full_excess = math.ceil(wqty / qty_per_excess)
             qty_leftover = wqty % qty_per_excess
-            record_cut(cut_length, wqty, "cut length", excess_length, "excess_rebar")
+            record_cut(cut_length, wqty, "cut length", excess_length, "excess rebar")
 
             excess_inventory[excess_length] -= qty_used_full_excess
             if excess_inventory[excess_length] <= 0:
