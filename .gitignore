@@ -1,0 +1,12 @@
+# Ignore venv directory
+.venv
+
+# Ignore settings
+.vscode
+
+# Ignore certain directories
+.testing
+__pycache__
+
+# Ignore certain files
+uv.lock

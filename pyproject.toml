@@ -1,0 +1,24 @@
+[project]
+name = "qckrebar"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.2",
+    "pandas>=2.2",
+    "streamlit>=1.42"
+]
+
+[project.optional-dependencies]
+notebooks = [
+    "jupyter",
+    "matplotlib>=3.10",
+    "plotly>=6.0.0"
+]
+handcalcs = [
+    "handcalcs",
+    "forallpeople"
+]
+computation = [
+    "scipy>=1.15",
+    "sympy>=1.13"
+]
