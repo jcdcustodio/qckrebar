@@ -1,5 +1,7 @@
 from collections import defaultdict
+import csv
 import math
+import os
 
 
 clengths_metric = (6, 7.5, 9, 10.5, 12)
@@ -12,6 +14,51 @@ clengths_english = (20, 25, 30, 35, 40)
 estimate_result = defaultdict(int)
 excess_inventory = defaultdict(int)
 cut_record = []
+
+
+def export_result(result: tuple):
+    """Helper function to write results into a file. Returns three (3) files in a folder `results`."""
+
+    # Create folder for results
+    result_path = r"./results/"
+    if not os.path.exists(result_path):
+        os.makedirs(result_path)
+
+    # Write estimate result into a new file
+    with open(
+        "results/rebar_estimates.csv", "w", encoding="utf-8-sig", newline=""
+    ) as result_out:
+        columns = ("rebar_length", "quantity")
+        writer = csv.DictWriter(result_out, fieldnames=columns)
+        writer.writeheader()
+        for length, quantity in sorted(result[0].items()):
+            writer.writerow({"rebar_length": length, "quantity": quantity})
+
+    # Write unused excess list into a new file
+    with open(
+        "results/unused_excess.csv", "w", encoding="utf-8-sig", newline=""
+    ) as result_out:
+        columns = ("length", "quantity")
+        writer = csv.DictWriter(result_out, fieldnames=columns)
+        writer.writeheader()
+        for length, quantity in sorted(result[1].items()):
+            writer.writerow({"length": length, "quantity": quantity})
+
+    # Write cut logs into a new file
+    with open(
+        "results/cut_log.csv", "w", encoding="utf-8-sig", newline=""
+    ) as result_out:
+        columns = [
+            "produced_length",
+            "produced_qty",
+            "produced_type",
+            "from_length",
+            "from_length_type",
+        ]
+        writer = csv.DictWriter(result_out, fieldnames=columns)
+        writer.writeheader()
+        for row in result[2]:
+            writer.writerow(row)
 
 
 def record_cut(length_produced:float, 
@@ -28,8 +75,9 @@ def record_cut(length_produced:float,
     Args:
         length_produced (float): Length of produced cut of rebar.
         qty_produced (int): Quantity of produced cut of rebar.
-        clength (float): Length used to produce **cut_length** (from commercial length or excess).
-        type (str): Type of produced cut.
+        type_produced (str): Type of produced cut of rebar (cut length/excess).
+        wlength (float): Length used to produce cut_length.
+        type_wlength (str): Type of length used to produce cut_length (from commercial length or excess).
         get_log (bool): Default is **False**. Returns the updated log of cut if **True**.
     
     Returns:
@@ -172,6 +220,11 @@ def use_excess_length(
 
 def get_estimate(cut_schedule:list, wclengths:list) -> list:
     """Wrapper function for functions used to estimate rebars."""
+
+    # Ensures program runs at clean state
+    estimate_result.clear()
+    excess_inventory.clear()
+    cut_record.clear()
 
     # Sort cut schedule starting at largest cut length
     input_cut_lengths = sorted(cut_schedule, reverse=True)

@@ -1,0 +1,9 @@
+﻿produced_length,produced_qty,produced_type,from_length,from_length_type
+6,32,cut length,6,new rebar
+4.6,68,cut length,10.5,new rebar
+1.3,34,excess,10.5,new rebar
+2.5,2,cut length,7.5,new rebar
+2.5,1,excess,7.5,new rebar
+1.25,2,cut length,2.5,excess rebar
+1.25,8,cut length,1.3,excess rebar
+0.05,8,excess,1.3,excess rebar
